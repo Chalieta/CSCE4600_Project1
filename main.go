@@ -30,10 +30,13 @@ func main() {
 	// First-come, first-serve scheduling
 	FCFSSchedule(os.Stdout, "First-come, first-serve", processes)
 
+	// Shortest job first scheduling
 	SJFSchedule(os.Stdout, "Shortest-job-first", processes)
 	
+	// Priority scheduling
 	SJFPrioritySchedule(os.Stdout, "Priority", processes)
 	
+	// Round robin scheduling
 	RRSchedule(os.Stdout, "Round-robin", processes)
 }
 
@@ -348,7 +351,7 @@ func RRSchedule(w io.Writer, title string, processes []Process) {
 		schedule        = make([][]string, len(processes))
 		gantt           = make([]TimeSlice, 0)
 	)
-	timeQuantum = 3
+	timeQuantum = 1
 	completed := 0
 	count := len(processes)
 	turn := 0
@@ -368,6 +371,8 @@ func RRSchedule(w io.Writer, title string, processes []Process) {
 			} else if stuck == turn { // meeting the invalid process that we were stuck with the first time
 				serviceTime++
 				lastStart = serviceTime 
+				check = false
+				turn = 0
 			}
 			continue
 		}
